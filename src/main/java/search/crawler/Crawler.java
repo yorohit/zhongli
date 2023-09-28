@@ -6,6 +6,6 @@ import java.util.List;
 public class Crawler {
 
     public List<URL> get(String query){
-        return null;
+        return List.of(new URL("https:www." + query +".com"));
     }
 }
