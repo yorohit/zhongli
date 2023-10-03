@@ -7,11 +7,10 @@ import urlShorten.url.URL;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class URLManager {
     Map<String, URL> cache = new HashMap<>();
-    Map<String, String> reverseCache = new HashMap<>();
+    Map<String, URL> reverseCache = new HashMap<>();
     final GlobalCache globalCache;
 
     public URLManager(GlobalCache globalCache) {
@@ -24,7 +23,7 @@ public class URLManager {
 
     public URL generateURLWithExpiryTime(String query, LocalDateTime expirationTime){
         URL url = generateURL(query);
-        ((GeneratedURL)url).setExpirationDate(expirationTime);
+        ((GeneratedURL)url).setExpirationTime(expirationTime);
         return url;
     }
 
@@ -35,12 +34,22 @@ public class URLManager {
         URL url = new GeneratedURL();
         url.setURL(query, globalCache);
         cache.put(query, url);
-        reverseCache.put(url.getUrl(), query);
+        reverseCache.put(url.getUrl(), url);
         return url;
     }
 
-    public Optional<String> redirectURL(String query){
-        return Optional.ofNullable(reverseCache.get(query));
+    public String redirectURL(String query){
+        if(reverseCache.containsKey(query)){
+            GeneratedURL url = (GeneratedURL) reverseCache.get(query);
+            if(url.getExpirationTime().isBefore(LocalDateTime.now())){
+                purge(url);
+                return "Expired URL";
+            }
+            else{
+                return url.getOriginalUrl();
+            }
+        }
+        return "URL not found";
     }
 
     private void purge(GeneratedURL url){

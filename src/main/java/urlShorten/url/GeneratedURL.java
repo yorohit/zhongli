@@ -3,7 +3,6 @@ package urlShorten.url;
 import urlShorten.utils.GlobalCache;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Random;
 
 public class GeneratedURL implements URL{
@@ -21,8 +20,12 @@ public class GeneratedURL implements URL{
     public String getOriginalUrl(){
         return originalUrl;
     }
-    public void setExpirationDate(LocalDateTime expirationTime){
+    public void setExpirationTime(LocalDateTime expirationTime){
         this.expirationTime = expirationTime;
+    }
+
+    public LocalDateTime getExpirationTime(){
+        return this.expirationTime;
     }
 
     @Override
