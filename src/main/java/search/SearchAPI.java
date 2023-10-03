@@ -5,11 +5,11 @@ import search.url.URL;
 
 import java.util.List;
 
-public class searchAPI {
+public class SearchAPI {
     //Think about multithreading later
 
     private final Database database;
-    public searchAPI(Database database){
+    public SearchAPI(Database database){
         this.database = database;
     }
     public List<URL> search(String query){
